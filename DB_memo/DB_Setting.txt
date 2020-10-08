@@ -1,0 +1,23 @@
+1. 압축 둘다 푼다.
+
+-DISK1폴더안의 setup 실행
+ 1). next -> 동의후 next -> 그대로 next -> 비번설정 후 넥스트 비번 학원에선 : 1q2w3e4r%T
+     -> Port for 'Oracle Database Listenr : 1521
+     -> Port for Oracle Services for Microsoft Transaction Server : 2030
+     -> Port for Oracle HTTP Listener : 8080 또는 8081
+     -> 위 포트번호 확인하고 인스톨
+
+
+-sqldeveloper
+ 1). 압축풀고 D드라이브에 넣음(sqldeveloper.exe 바탕화면에 바로가기만들기)
+ 2). sqldeveloper.exe 실행하고 좌측 상단의 초록색 +모양 클릭
+ 3). 접속 이름 : 접속한정보 식별자 
+     사용자 이름 : 계정명
+     비밀번호 : 비밀번호
+
+
+-Oracle 접속 방법(GUI) : sqldeveloper폴더 안에 sqldeveloper.exe 실행 -> 이게 Oracle GUI버전
+-Oracle 접속 방법(CLI) : cmd창에 sqlPlus적고 user-name : system, PW:내가 설정한 것
+
+※외부 DB불러오기
+-편집창에 sql파일 드래그&드롭

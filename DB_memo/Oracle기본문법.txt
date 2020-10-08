@@ -1,0 +1,67 @@
+@ Oracle 실행하기 -> cmd창에 sqlPlus 또는 sqldeveloper.exe 
+
+@ 접속 계정 확인하기 -> show user;
+
+@ 계정전환 -> conn 유저이름 (ex. conn HR) 
+ -> 계정전환 실패시 로그인했던 계정까지도 연결 끊김
+ ※CLI일 때는 이렇게 GUI일 때는 좌상단 초록색+클릭하여
+
+@ 등록된 계정 모두 확인하기 -> select username from dba_users;
+
+@ 특정 계정 상태 확인하기 -> select username, account_status from dba_users where username='유저명';
+ -> LOCK : 계정잠김 , EXPIRED : 계정 비밀번호 만료
+
+@ 특정 계정 Lock해제하기 -> alter user 유저명 account unlock;
+
+@ 계정 비밀번호 비밀번호 설정 -> alter user 유저명 identified by 설정할 비밀번호;
+   ex.  alter user HR identified by hr;
+
+@ 계정 만들기 -> create user 생성할 계정명 identified by 설정할 비밀번호;
+   ex. create user mslove identified by mslove;
+   ※계정 만들기는 반드시 최고계정 system으로 진행해야 함
+
+@ 권한부여하기(system 계정으로 해야함) -> grant 부여할 권한 to 부여할계정명;
+   ex. grant connect to mslove; -> mslove계정에 접속할 수 있는 권한 부여
+   ※권한 부여는 반드시 최고계정 system으로 진행해야 함
+
+@권한 목록
+ 1. connect : 접속
+ 2. resource : 자원(테이블, 데이터베이스 등)에 접근 및 사용
+
+@ 화면 초기화 -> cl scr;
+
+@ 현재 계정의 테이블 목록 확인하기 -> SELECT * FROM tab;
+
+@ 전체 계정의 테이블 목록 확인하기 -> SELECT * FROM user_tables;
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------
+@ 테스트 계정 접속 하기 (쓰지는 않을거지만 연습으로)
+1. system 계정으로 접속
+	- Enter user-name: system
+	- Enter password: [비밀번호]
+	- show user;
+
+2. 여러 계정 확인
+	select username from dba_users;
+
+3. 테스트 계정인 HR계정 접속
+	conn HR
+	에러발생!! "the account is locked"
+
+4. 다시 system 계정으로 접속하여 계정 잠금해제 및 비밀번호 설정
+	conn	system/[비밀번호]
+	select username, account_status from dba_users where username='HR';
+	alter user HR account unlock;
+	alter user HR identified by hr;
+
+5. 다시 HR계정으로 접속해보기
+	conn HR/hr;
+	show user;
