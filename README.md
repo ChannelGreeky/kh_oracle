@@ -1,3 +1,5 @@
 # kh_oracle   
 --------memo--------   
-20201008 : Data, DBMS, DB, DDL, DML, DCL, TCL, SQL, Table, DATATYPE, SELECT, 연산자
+20201008 : Data, DBMS, DB, DDL, DML, DCL, TCL, SQL, Table, AS, DISTINCT, DATATYPE, SELECT, 연산자   
+   
+20201012 : ORDER BY, 함수(문자열,숫자,날짜 처리 함수, 형 변환 함수, 널처리함수, 그룹함수)   

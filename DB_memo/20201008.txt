@@ -239,11 +239,24 @@ ex. SELECT EMP_NAME, DEPT_CODE, SALARY FROM EMPLOYEE WHERE SALARY BETWEEN 350000
  -> ESCAPE에 사용한 구분자를 사용하여 구분자 뒤에있는 한 문자는 문자열로 처리해 달라는 뜻
  -> SELECT EMP_NAME AS 이름, HIRE_DATE AS 입사일, EMAIL FROM EMPLOYEE WHERE EMAIL LIKE '___#_%' ESCAPE '#';
 
-@ 비교 연산자 - NOT, LIKE
--> -> 비교하려는 값이 지정한 특정 패턴을 만족시키지 않을 때 TRUE를 리턴하는 연산자
+@ 비교 연산자 - NOT LIKE
+-> 비교하려는 값이 지정한 특정 패턴을 만족시키지 않을 때 TRUE를 리턴하는 연산자
+
+@ 비교 연산자 - IS NULL / IS NOT NULL
+-> NULL값 여부를 비교하는 연산자
+
+@ 비교 연산자 - IN
+-> 비교하려는 값이 목록에 일치하는 경우가 있으면 TRUE를 반환하는 연산자
 
 @ 논리 연산자 - AND, OR, NOT
 
 @ 연결 연산자
 -> 연결 연산자는 || 를 사용하여 여러 컬럼을 하나의 컬럼처럼 연결하거나 컬럼과 리터럴을 연결할 수 있음
 ex) SELECT EMP_NAME || '님', SALARY || '원' FROM EMPLOYEE
+
+@ 연산자 우선 순위
+-> 여러 연산자를 사용하는 경우엥는 우선순위를 고려해서 사용 해야 한다.
+-> 산술 > 연결 > 비교 > IS NULL/IS NOT NULL, LIKE, IN/NOT IN > BETWEEN AND/NOT BETWEEN AND > NOT > AND > OR
+-> 보통 연산자를 우선 실행시키기 위해선 괄호 () 를 사용한다.
+
+
