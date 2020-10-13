@@ -71,11 +71,7 @@ CASE
 END AS 야근유무 FROM EMPLOYEE
 ORDER BY DEPT_CODE;
 
---실습
---급여가 350 ~ 600만원인 사람의 이름, 부서명, 직책명, 급여를 출력해라
---부서코드, 직책코드가 아닌 부서명, 직책명
---단, 부서가 없는 사람은 부서 없음 이라고 출력
---급여순으로 내림차순으로 출력
+--join문제
 SELECT EMP_NAME AS 이름, 
 NVL(DEPT_TITLE, '부서 없음') AS 부서,
 JOB.JOB_NAME AS 직급, SALARY
