@@ -100,3 +100,28 @@ FULL JOIN DEPARTMENT ON DEPT_CODE = DEPT_ID;
 -> 한쪽 테이블의 모든 행과 다른쪽 테이블의 모든 행을 조인시킴
 	-결과는 두 테이블의 컬럼 수를 곱한 개수가 나옴
 -> 모든 경우의 수를 보고 싶을 때 사용
+
+@ SELF JOIN
+-> 조인은 두 개 이상의 서로 다른 테이블을 연결하기도 하지만,
+같은 테이블을 조인하는 경우도 있음
+-> 이러한 경우 자기 자신과 조인을 맺는것이라 하여 
+SELF JOIN 이라고 함
+ex)
+SELECT E1.EMP_ID AS "사원 ID", 
+E1.EMP_NAME AS "사원 이름",
+E1.MANAGER_ID AS "사원의 매니저ID", 
+E2.EMP_ID AS "매니저의 ID",
+E2.EMP_NAME AS "매니저의 이름" 
+FROM EMPLOYEE E1 JOIN EMPLOYEE E2 ON E1.MANAGER_ID = E2.EMP_ID;
+
+@ 다중 JOIN
+-> 여러 개의 조인문을 한번에 사용할 수 있는 것
+※ 다중 JOIN을 사용할 때에는 조인의 유의해서 사용해야 한다.
+(밑 예제 코드에서 LOCATION JOIN과 DEPARTMENT JOIN 순서를 바꾸면 정상작동 X)
+ex)
+SELECT E.EMP_NAME, D.DEPT_TITLE, 
+L.NATIONAL_CODE, J.JOB_NAME
+FROM EMPLOYEE E 
+LEFT JOIN DEPARTMENT D ON E.DEPT_CODE = D.DEPT_ID
+LEFT JOIN LOCATION L ON D.LOCATION_ID = L.LOCAL_CODE
+JOIN JOB J ON E.JOB_CODE = J.JOB_CODE;
