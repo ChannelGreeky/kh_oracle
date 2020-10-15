@@ -94,7 +94,7 @@ SUBSTR(STRING, POSITION, 	|        CHARACTER		|   POSITION : 문자열을 잘라
   MOD(NUMBER, DIVISION)	|	NUMBER		|  Number : 숫자 혹은 데이터 컬럼   	
 			|			|  DIVISION : 나눌 수 혹은 나눌 숫자 데이터 컬럼
 ───────────────────────────────────────────────
-  ROUND(NUMBER, 	|	NUMBER		|  NUMBER : 숫자 혹은 숫자 데이터 컬럼
+  ROUND(NUMBER, 		|	NUMBER		|  NUMBER : 숫자 혹은 숫자 데이터 컬럼
 	[POSITION])	|			|  POSITION : 표현될 데이터 자릿수
 ───────────────────────────────────────────────
        FLOOR(NUMBER)	|	NUMBER		|  NUMBER타입의 컬럼 또는임의의 숫자

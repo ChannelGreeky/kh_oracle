@@ -1,0 +1,39 @@
+@ CREATE 실습
+- 다음 조건에 만족하는 TABLE들을 생성하시오
+첫번째 테이블 명 : EXPERT_TBL
+컬럼명
+MEMBER_CODE(NUMBER) - 기본키			-- 회원전용코드 
+MEMBER_ID (varchar2(20) ) - 중복금지			-- 회원 아이디
+MEMBER_PWD (char(20)) - NULL 값 허용금지		-- 회원 비밀번호
+MEMBER_NAME(nchar(10)) - NULL값 허용 금지		-- 회원 이름
+MEMBER_ADDR (char(50)) - NULL값 허용금지		-- 회원 거주지
+GENDER (varchar2(5)) - '남' 혹은 '여'로만 입력 가능	-- 성별
+PHONE(varchar2(20)) - 기본값 000-0000-0000		-- 회원 연락처
+
+두번째 테이블 명 : A3Company_TBL
+컬럼명
+MEMBER_CODE(NUMBER)  - 외래키(EXPERT_TBL의 기본키 참조)	-- 회원전용코드
+SKILL(nchar(10)) 					-- 회원 능력
+
+
+이때, EXPERT_TBL 테이블의 데이터가 삭제 되면 A3Company_TBL에 
+기록된 데이터도 삭제 될 수 있도록 만들어라..
+
+
+* 연습용 데이터  삽입 코드
+
+INSERT INTO EXPERT_TBL VALUES (100,'mslove','1233','노민수','경기도 부천','남','010-4254-5664');
+INSERT INTO EXPERT_TBL VALUES (101,'khlove','5437','경실련','인천광역시','여','010-1222-4444');
+INSERT INTO EXPERT_TBL VALUES (102,'samsam2','jojo11','김조조','서울시 구로','남','010-4555-7778');
+INSERT INTO EXPERT_TBL VALUES (103,'mongshell','choco00','이롯데','남태평양','여','010-6666-7458');
+INSERT INTO EXPERT_TBL VALUES (104,'candy','whiteday','박인기','후쿠시마 원전','남',DEFAULT);
+INSERT INTO EXPERT_TBL VALUES (105,'smart','car00','최바보','베이징','남','010-8996-4226');
+
+
+SELECT * FROM EXPERT_TBL;
+
+INSERT INTO A3Company_TBL VALUES (100,'해킹');
+INSERT INTO A3Company_TBL VALUES (104,'교육');
+INSERT INTO A3Company_TBL VALUES (102,'교육');
+INSERT INTO A3Company_TBL VALUES (105,'개발');
+
