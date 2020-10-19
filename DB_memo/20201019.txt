@@ -1,0 +1,192 @@
+@ 데이터 딕셔너리 (Data Dictionary)
+-> 자원을 효율적으로 관리하기 위한 다양한 정보를 저장하는 시스템 테이블
+-> 데이터 딕셔너리는 사용자가 테이블을 생성하거나 사용자를
+변경하는 등의 작업을 할 때 데이터베이스 서버에 의해 자동으로 갱신되는 테이블
+-> 사용자는 데이터 딕셔너리의 내용을 직접 수정하거나 삭제 할 수 없음
+-> 데이터 딕셔너리 안에는 중요한 정보가 많이 있기 때문에 사용자는
+이를 활용하기 위해 데이터 딕셔너리 뷰를 사용 함
+
+※ 뷰(View)는 원본 테이블을 커스터마이징해서 보여주는 원본 테이블의
+연결된 가상의 Table 
+
+@ 3개의 데이터 딕셔너리 뷰 
+
+1. DBA_XXXX : 데이터 베이스 관리자만 접근이 가능한 객체 등의 정보 조회
+	(DBA는 모든 접근이 가능하므로 모든 디비에 있는 모든 객체에
+	대한 조회가 됨 - 조회시 많은 데이터가 보임)
+
+2. ALL_XXXX : 자신의 계정이 소유하거나 권한을 부여받은 
+		객체 등에 관한 정보 조회
+
+3. USER_XXXX : 자신의 계정이 소유한 객체 등에 관한 정보 조회
+
+
+https://docs.oracle.com/cd/B28359_01/server.111/b28320/index.htm
+
+
+@ USER 데이터 딕셔너리
+
+DESC USER_TABLES
+-> 자신이 생성한 테이블, 인덱스, 뷰 등과 같은 자신이 소유한
+객체의 정보를 저장하고 있는 데이터 딕셔너리
+
+SELECT * FROM USER_OBJECTS WHERE OBJECT_TYPE = 'TABLE';
+-> 현재 계정으로 생성한 객체 테이블 목록을 확인할 수 있음
+
+@ ALL 데이터 딕셔너리
+DESC ALL_TABLES
+
+
+SELECT * FROM ALL_TABLES;
+-> 현재 계정으로 접근할 수 있는 테이블 목록
+(자신이 소유한것은 아니지만 권한을 받은 경우 확인 가능)
+
+
+@ DBA 데이터 딕셔너리
+SELECT OWNER, TABLE_NAME FROM DBA_TABLES;
+-> 테이블들의 소유자와 이름을 볼 수 있음
+(관리자만 볼 수 있음)
+
+@ VIEW
+-> 하나 이상의 테이블에서 원하는 데이터를 선택하여 새로운 가상 
+테이블을 만들어 주는것
+-> 다른 테이블에 있는 데이터를 보여줄 뿐이며, 데이터 자체를 포함하고 있는
+것은 아님 
+	- 저장장치 내에 물리적으로 존재하지 않고, 가상의 테이블로 만들어짐
+	- 물리적인 실제 테이블과의 링크 개념
+-> 뷰를 사용하면 특정 사용자가 원본 테이블에 접근하여 모든 데이터를
+보게 하는것을 방지 할 수 있음
+	- 원본 테이블이 아닌 뷰를 통한 특정 데이터만 보여지게 만듦
+-> 뷰를 만들기 위해서는 뷰 생성 권한이 필요
+
+@ View Data Dictionary 확인
+-> SELECT * FROM USER_VIEWS;
+
+@ VIEW 만들기
+CREATE VIEW <뷰이름> AS <SELECT 구문>
+-> VIEW 생성시 사용하는 SELECT구문에서 COLUMN에 수식을 사용할 수 없다 AS사용해야 함
+
+@ VIEW 생성 권한 부여 - system 계정에서 진행
+GRANT CREATE VIEW TO kh;  -- kh계정에 권한 부여
+
+@ 다른 계정에서 VIEW를 볼수 있도록 권한 부여
+-> 뷰는 권한을 부여하지 않으면 다른 계정에서 볼 수 없다
+ -> 테이블 또는 뷰가 없다고 에러 발생
+-> 따라서 뷰를 조회할 수 있는 권한을 부여해 주어야 함
+ -> SYSTEM계정에서 GRANT SELECT ON KH.뷰이름 TO TEST01;
+
+# 뷰 사용시 주의할 점
+-> 뷰도 원본 테이블과 연동되어 있기 때문에 DML 권한에 따라 데이터를
+ 입력, 수정, 삭제할 수 있음
+
+@ VIEW 옵션
+-> OR REPLACE : 생성한 뷰가 존재하면 해당 뷰를 갱신
+-> FORCE / NOFORCFE : FORCE옵션은 기본 테이블이 존재하지 않더라도 뷰를 생성
+		       NOFORCE는 기본 테이블이 없으면 생성하지 않음 (기본값은 NOFORCE)
+-> WITH CHECK OPTION : 설정한 컬럼의 값을 수정하지 못하게 함
+-> WITH READ ONLY : 뷰에 대해 조회만 가능하고, 삽입, 수정, 삭제 등을 하지 못하게 함
+   ※ CHECK OPTION과 READ ONLY의 차이점은 컬럼 초점과 뷰의 초점
+
+@ SEQUENCE
+-> 순차적으로 정수 값을 자동으로 생성하는 객체로 자동 번호 발생기의 역할을 함
+[표현식] : CREATE SEQUENCE 시퀀스명
+1. [STRAT WITH 숫자]
+-> 처음 발생시킬 시작 값을 지정, DEFAULT는 1
+2. [INCREMENT BY 숫자]
+-> 다음 값에 대한 증가치, DEFAULT는 1
+3. [MAXVALUE 숫자 | NOMAXVALUE]
+->발생시킬 최대값을 지정, 10의 27승 -1까지 가능
+4. [MINVALUE 숫자 | NOMINVALUE]
+-> 발생시킬 최소값을 지정, -10의 26승 까지 가능
+5. [CYCLE | NOCYCLE]
+-> 시퀀스가 최대값까지 증가를 완료하면 
+    CYCLE은 START WITH 설정값으로 돌아가고, NOCYCLE은 에러 발생
+6. [CACHE | NOCACHE]
+-> CACHE는 메모리상에서 시퀀스 값을 관리 기본값은 20개
+
+@ NEXTVAL, CURRVAL
+-> NEXTVAL은 현재 시퀀스를 증가시키고 값을 반환
+-> CURRVAL은 현재 시퀀스의 값을 반환
+
+## NEXTVAL, CURRVAL을 사용할 수 있는 경우
+-> 서브쿼리가 아닌 SELECT문 ex) SELECT 시퀀스명.NEXTVAL FROM DUAL;
+-> INSERT문의 SELECT절
+-> INSERT문의 VALUE절
+-> UPDATE문의 SET 절
+
+## NEXTVAL, CURRVAL을 사용할 수 없는 경우
+-> VIEW의 SELECT절
+-> DISTINCT 키워드가 있는 SELECT절
+-> GROUP BY, HAVING, ORDER BY 절이 있는 SELECT 절
+-> SELECT, DELETE, UPDATE의 서브쿼리
+-> CREATE TABLE, ALTER TABLE 명령의 DEFAULT값
+
+@ INDEX
+-> SQL명령문의 처리속도를 향상시키기 위해서 생성하는 오라클 객체
+
+@ INDEX의 장점
+-> 검색속도가 빨라지고 시스템에 걸리는 부하를 줄여서 시스템 전체 성능을 향상시킬 수 있음
+
+@ INDEX의 단점
+-> 인덱스를 위한 추가 저장공간이 필요하고, 인덱스를 생성하는데 시간이 걸림
+-> 따라서 데이터의 변경작업(INSERT / UPDATE / DELETE)이 자주 일어나는
+    테이블에 INDEX를 생성하면 오히려 성능 저하가 발생할 수 있음
+    ->기존 데이터에 대하여 알고리즘을 이용하여 INDEX를 생성하였는데
+    데이터가 변경되면 다시 새롭게 알고리즘을 사용하여 INDEX를 생성해야 하기 때문에
+    자주 변경작업이 일어나는 테이블은 오히려 성능저하가 발생
+
+@ INDEX 생성 표현식
+-> CREATE INDEX 인덱스면 ON 테이블명(컬럼명1, 컬럼명2, 컬럼명3, ...)
+
+@ INDEX 삭제 표현식
+-> DROP INDEX 인덱스명
+
+## INDEX 생성 정보 조회
+-> SELECT * FROM USER_IND_COLUMNS;
+
+※ INDEX를 만들지 않아도 오라클 내부에서는 기본키를 가지고 자동으로 인덱스를 만들어서 사용하는 경우도 있음
+
+@ SYNONYM (동의어)
+-> 사용자가 다른 사용자의 객체를 참조할 때 [사용자ID].[테이블명]으로
+    사용해야 접근이 가능하다.
+-> 이처럼 길게 표현되는 것을 동의어(SYNONYM)로 설정하고 간단하게 사용이 가능하다.
+
+# 비공개 동의어
+-> 객체에 대한 접근 권한을 부여 받은 사용자가 정의한 동의어
+-> 해당 사용자(정의한 계정)만 사용할 수 있음
+
+# 공개 동의어(SYSTEM 계정에서 정의하며 PUBLIC 키워드를 붙임)
+-> 권한을 주는 사용자(DBA)가 정의한 동의어 
+-> 정의는 SYSTEM 계모든 사용자가 사용할 수 있음(PUBLIC)
+-> 공개동의어를 정의해도 다른 계정에서 해당 테이블을 읽을수 있는 권한이 없으면 접근 불가
+
+※ 동의어도 만들기 위해서 권한이 필요함 (SYSTEM계정으로 부여)
+
+# 동의어 삭제
+-> 공개 동의어 : DROP PUBLIC SYNONYM 동의어명;
+-> 비공개 동의어 : DROP SYNONYM 동의어명;
+
+@ 동의어 확인
+SELECT * FROM ALL_SYNONYMS WHERE TABLE_OWNER = '계정명';
+-- ALL_SYNONYMS TABLE에는 사용할 수 있는 모든동의어가 있음
+
+@ ROLE
+-> 사용자에게 여러개의 권한을 한번에 부여할 수 있는 객체
+-> 사용자에게 권한을 부여할 때 한개씩 부여하게 되면 권한 부여 및
+    회수에 따른 관리가 불편하기 때문에 ROLE을 사용함
+
+@ Oracle DBMS 설치시 기본 제공되는 ROLE
+-> CONNECT, RESOURCE, DBA
+	-CONNECT : 사용자가 데이터베이스에 접속 가능하도록 
+	하기위한 권한이 설정되어있는 ROLE
+	- RESOURCE : 사용자가 객체(테이블 등) 를 생성하기 위한
+	시스템 권한이 제공되는 ROLE
+	- DBA : 시스템 자원을 무제한적으로 사용가능하며, 시스템을
+	관리하기 위한 모든 권한이 제공되는 ROL
+
+@ 사용자 ROLE 생성 / 부여 
+
+ex) 3가지의 ROLE 만들기
+	- emptyROLE : 아무 권한도 없는 ROLE
+	- connectROLE : 접속 권한만 있는 ROLE
+	- managerROLE : 접속 권한 + 자원(객체) 생성 권한이 있는 ROLE

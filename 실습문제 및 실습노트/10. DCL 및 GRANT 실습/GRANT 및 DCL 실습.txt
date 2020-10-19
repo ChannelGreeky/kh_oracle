@@ -1,0 +1,48 @@
+다음 조건의 맞게 테이블을 생성 및 데이터 삽입을 하여라.
+
+- 계정 생성 
+-> test02 : 모든 개체 생성 및 수정 권한 부여
+-> test03 : MEMBER 테이블의 데이터 출력, 수정, 삭제 권한 부여
+-> test04 : MEMBER 테이블의 데이터 출력, 삽입 권한 부여
+-> test05 : MEMBER 테이블의 테이블 수정 권한 부여
+
+* test02 계정에서 테이블 생성
+
+MEMBER TABLE
+	- M_NO 		NUMBER		기본키
+	- M_ID		VARCHAR2(20)	유니크, NOT NULL
+	- M_NAME	VARCHAR2(30)	NOT NULL
+	- M_GENDER	VARCHR2(3)	남 또는 여 만 기록 가능
+
+
+* test05 계정에서 테이블 수정
+MEMBER 테이블의 컬럼 추가	
+	- M_AGE		NUMBER		NOT NULL
+
+MEMBER 테이블의 컬럼 수정
+	- M_NAME	CHAR(40)	
+
+* test04 계정에서 데이터 삽입
+(1, 'user11','홍길동','남',20);
+(2, 'user22','김말똥','여',30);
+(3, 'user23','고길똥','남',40);
+
+* test03 계정에서
+- 데이터 수정 (수정시 M_NO 사용)
+user23 -> user33
+
+- 데이터 삭제
+user22 데이터 삭제
+
+
+* test04 계정에서
+- 데이터 확인  : 확인시 user11 , user33 계정의 정보가 보여야 함
+
+
+※ 다 끝나면 권한 회수 및 확인해보세요 
+
+
+
+
+
+

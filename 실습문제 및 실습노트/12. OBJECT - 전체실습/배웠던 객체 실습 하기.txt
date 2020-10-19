@@ -1,0 +1,91 @@
+
+계정 생성 : khtest
+권한 부여 : connect,resource
+
+테이블 2개 생성
+회원테이블(MEMBER), 게시판테이블(BOARD)
+
+## 회원테이블 ##
+MEMBER_NO(NUMBER)			-- 회원 고유 순번 (자동 증가), PRIMARY KEY
+MEMBER_USERID (VARCHAR2(20))		-- 회원 아이디		UNIQUE, NOT NULL
+MEMBER_USERPWD (CHAR(20))		-- 회원 비밀번호		NOT NULL
+MEMBER_NICKNAME (VARCHAR2(20))	-- 회원 닉네임		UNIQUE, NOT NULL
+MEMBER_GENDER (NVARCHAR2(3))		-- 회원 성별('남' 혹은 '여')	NOT NULL
+MEMBER_EMAIL (VARCHAR2(30))		-- 회원 이메일		NOT NULL
+	
+-> SEQUENCE는 MEMBER_NO_SEQ
+-> 회원 고유 번호는 1000번 부터 시작하여 1씩 증가 해야함
+-> MAX 번호는 1000000 번 까지
+-> 성별은 '남' 또는 '여' 만 데이터 삽입이 가능 해야함 
+
+
+## 게시판 테이블 ##
+BOARD_NO (NUMBER)		-- 글 번호(자동 증가)	, PRIMARY KEY
+BOARD_TITLE (VARCHAR2(20))	-- 글 제목		NOT NULL
+BOARD_CONTENT (VARCHAR2(200))	-- 글 내용		NOT NULL
+BOARD_WRITEDATE (DATE)		-- 글 작성시간		NOT NULL
+BOARD_NICKNAME (VARCHAR2(20))	-- 글 작성자(닉네임)	NOT NULL 및 FOREIGN KEY
+
+-> SEQUENCE는 BOARD_NO_SEQ
+-> 글 번호는 1번부터 시작하여 1씩 증가 해야함
+-> MAX 번호는 500000번 까지
+-> BOARD_NICKNAME은 MEMBER 테이블의 회원 닉네임을 사용하여 외래키로 지정
+	(MEMBER 테이블에 존재하지 않는 사용자가 글을 작성할 순 없음)
+
+
+## 추가적인 OBJECT 생성하기 ##
+
+1. 위에 사항을 확인하고 필요한 SEQUENCE 객체 만들기 
+2. 회원번호 , 회원닉네임, 회원 이메일, 회원 작성글 제목 을
+볼 수 있는 VIEW 만들기 - MEMBER_WRITE_VIEW
+3. 작성글을 검색할때 빠르게 검색하기 위하여 TITLE,CONTENT에 INDEX 객체 만들기 - BOARD_WRITE_INDEX
+4. MEMBER와 BOARD 테이블을 'M' 과 'B' 로도 검색 할 수 있게 만들기
+ex)	SELECT * FROM M; -- MEMBER 테이블 정보가 보여야 함
+
+
+
+※ 각종 확인은 직접 데이터를 넣고 확인 해보세요  (모든 테이블 및 객체를 만들고 나면 데이터 삽입 해보기)
+INSERT INTO MEMBER VALUES (MEMBER_NO_SEQ.NEXTVAL,'user11','1234','날으는 홍길동','남','hong@naver.com'); -- 성공
+INSERT INTO MEMBER VALUES (MEMBER_NO_SEQ.NEXTVAL,'user22','1234','오예 김말똥','여','mal@naver.com'); -- 성공
+INSERT INTO MEMBER VALUES (MEMBER_NO_SEQ.NEXTVAL,'user33','1234','이눔 고길똥','남자','gogo@naver.com'); -- 실패
+INSERT INTO MEMBER VALUES (MEMBER_NO_SEQ.NEXTVAL,'user44','1234','어서옵쇼','남'); -- 실패
+INSERT INTO MEMBER VALUES (MEMBER_NO_SEQ.NEXTVAL,'user55','1234','삼사오오','남','water@naver.com'); -- 성공
+
+INSERT INTO BOARD VALUES (BOARD_NO_SEQ.NEXTVAL,'바람해봤니?','나는 리니지 했다',SYSDATE,'날으는 홍길동'); --성공
+INSERT INTO BOARD VALUES (BOARD_NO_SEQ.NEXTVAL,'도와줘요','메롱',SYSDATE,'이눔 고길똥'); --실패
+INSERT INTO BOARD VALUES (BOARD_NO_SEQ.NEXTVAL,'안뇽하세요','안녕가세요',SYSDATE,'삼사오오'); --성공
+INSERT INTO BOARD VALUES (BOARD_NO_SEQ.NEXTVAL,'친구들아ㅋㅋ','마이묶었다 아이가',SYSDATE,'오예 김말똥'); --성공
+INSERT INTO BOARD VALUES (BOARD_NO_SEQ.NEXTVAL,'전우치 알어?','이제부터 좀 나도 변해볼까?',SYSDATE,'날으는 홍길동'); --성공
+
+SELECT * FROM M; -- 3개의 데이터가 보여야 함 
+SELECT * FROM B; -- 4개의 데이터가 보여야 함
+
+SELECT * FROM MEMBER_WRITE_VIEW; -- 4개의 데이터가 보여야 함 (NO,NICKNAME,MAIL, TITLE)
+
+SELECT BOARD_TITLE,BOARD_CONTENT FROM BOARD ; -- 해당 코드에서 F10번을 누르면 INDEX 사용이 되어야 함
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

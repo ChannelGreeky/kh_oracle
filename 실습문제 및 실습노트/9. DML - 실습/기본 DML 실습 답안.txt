@@ -1,0 +1,48 @@
+
+## 테이블 생성 ##
+
+create  table  khacademy( 
+no number primary key,
+id varchar(20)  unique,  
+pass varchar(20) not null,  
+name varchar(20) not null,
+nickName varchar(20) unique,
+gender char,  
+tel varchar(20) default '010-0000-0000',  
+address varchar(90));
+
+
+## 데이터 삽입 ##
+
+insert into khacademy values(1,'hong11','1234','홍길동','동해번쩍','M','010-4958-2333','경기도');
+insert into khacademy values(2,'gogo11','4444','고길똥','둘리세퀴','M',DEFAULT,'경상도');
+insert into khacademy values(3,'kimDDong','6658','김말똥','내눈은말똥','F','010-6674-8986','전라도');
+insert into khacademy values(4,'sin','5356','신구','니들이게맛을','M','010-8997-1122','울릉도');
+insert into khacademy values(5,'mslove','5555','김민수','영원한ms','F',DEFAULT,'서울시');
+
+
+## 데이터 수정 ##
+
+1. 내눈은말똥의 비밀번호 변경
+UPDATE khacademy SET PASS = '9999' WHERE nickName = '내눈은말똥';
+
+
+2. 전화번호가 기본값인 사원들의 전화번호 변경
+UPDATE khacademy SET TEL = '없음' WHERE TEL='010-0000-0000';
+
+
+
+
+## 데이터 삭제 ##
+DELETE khacademy WHERE ID='sin';
+
+
+
+## 테이블 초기화 ##
+TRUNCATE TABLE khacademy;
+
+
+
+
+
+
